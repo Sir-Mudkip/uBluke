@@ -31,15 +31,15 @@ setup-gnome:
     dconf write /org/gnome/desktop/wm/keybindings/switch-to-workspace-4 "['<Super>4']"
     dconf write /org/gnome/desktop/wm/keybindings/switch-to-workspace-5 "['<Super>5']"
     dconf write /org/gnome/desktop/wm/keybindings/switch-to-workspace-6 "['<Super>6']"
-    
-    # dark mode purple accents
+
+    # dark mode slate
     dconf write /org/gnome/desktop/interface/accent-color "'slate'"
     dconf write /org/gnome/desktop/interface/color-scheme "'prefer-dark'"
-    
+
     # fixed number of workspaces at 6
     dconf write /org/gnome/mutter/dynamic-workspaces false
     dconf write /org/gnome/desktop/wm/preferences/num-workspaces 6
-    
+
     # disable application switching shortcuts
     dconf write /org/gnome/shell/keybindings/switch-to-application-1 "['']"
     dconf write /org/gnome/shell/keybindings/switch-to-application-2 "['']"
@@ -50,14 +50,14 @@ setup-gnome:
     dconf write /org/gnome/shell/keybindings/switch-to-application-7 "['']"
     dconf write /org/gnome/shell/keybindings/switch-to-application-8 "['']"
     dconf write /org/gnome/shell/keybindings/switch-to-application-9 "['']"
-    
+
     # auto screen lock disable
     dconf write /org/gnome/desktop/screensaver/lock-enabled false
-    
+
     # night light
     dconf write /org/gnome/settings-daemon/plugins/color/night-light-enabled true
     dconf write /org/gnome/settings-daemon/plugins/color/night-light-schedule-automatic true
-    
+
     # unpin apps from dock
     dconf write /org/gnome/shell/favorite-apps "['']"
 
@@ -66,7 +66,7 @@ setup-gnome:
     dconf write /org/gnome/settings-daemon/plugins/media-keys/home "['<Super>e']"
 
     # shortcuts for ptyxis and keepass
-    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']"
+    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/']"
     dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/name "'Ptyxis'"
     dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/binding "'<Control><Alt>t'"
     dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/command "'/usr/bin/ptyxis --new-window'"
@@ -77,9 +77,8 @@ setup-gnome:
     dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/binding "'<Control><Alt>k'"
     dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/command "'flatpak run org.keepassxc.KeePassXC'"
 
-	# window switcher
+    # window switcher
     dconf write /org/gnome/desktop/wm/keybindings/switch-windows "['<Alt>Tab']"
-
 
 # Run a system benchmark (requires stress-ng from Homebrew)
 [group('System')]

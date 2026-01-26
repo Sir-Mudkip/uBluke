@@ -7,11 +7,13 @@
 
 # Install all Brewfiles at once
 [group('Apps')]
-install-all-brew:
+install-all-tools:
     #!/usr/bin/env bash
     echo "Installing all applications from Brewfiles..."
     brew bundle --file /usr/share/ublue-os/homebrew/default.Brewfile
     brew bundle --file /usr/share/ublue-os/homebrew/development.Brewfile
+	brew bundle --file /usr/share/ublue-os/homebrew/fonts.Brewfile
+	brew bundle --file /usr/share/ublue-os/homebrew/flatpaks.Brewfile
 
 # Install JetBrains Toolbox for managing JetBrains IDEs
 [group('Apps')]

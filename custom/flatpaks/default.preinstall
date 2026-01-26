@@ -104,17 +104,17 @@ Branch=stable
 [Flatpak Preinstall org.kde.kleopatra]
 Branch=stable
 
-[Flatpak Preinstall com.sublimehq.SublimeText]
+[Flatpak Preinstall com.sublimetext.three]
 Branch=stable
 
 # Universal Blue Specific
-[Flatpak Preinstall com.ranfdev.DistroShelf]
+[Flatpak Preinstall com.ranfdev.Distrobox]
 Branch=stable
 
 [Flatpak Preinstall io.github.kolunmi.Bazaar]
 Branch=stable
 
-[Flatpak Preinstall page.tesk.Refine]
+[Flatpak Preinstall page.codeberg.Imaginer.Refine]
 Branch=stable
 
 # GTK Themes (runtimes)
