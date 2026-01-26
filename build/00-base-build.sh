@@ -6,7 +6,7 @@ echo "::group:: Copy Custom Files"
 
 # Copy Brewfiles to standard location
 mkdir -p /usr/share/ublue-os/homebrew/
-cp /ctx/custom/brew/*.Brewfile /usr/share/ublue-os/homebrew/
+cp /custom/brew/*.Brewfile /usr/share/ublue-os/homebrew/
 
 # Consolidate Just Files
 find /ctx/custom/ujust -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >> /usr/share/ublue-os/just/60-custom.just
