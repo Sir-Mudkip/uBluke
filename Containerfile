@@ -82,7 +82,7 @@ RUN rm /opt && mkdir /opt
 
 # Copy Homebrew files from the brew image
 # And enable
-COPY --from=ghcr.io/ublue-os/brew:latest /system_files /oci/brew
+COPY --from=ghcr.io/ublue-os/brew:latest /system_files /
 RUN --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
