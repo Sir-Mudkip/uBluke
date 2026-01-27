@@ -7,13 +7,63 @@
 
 # Install all Brewfiles at once
 [group('Apps')]
-install-all-tools:
+install-brew-tools:
     #!/usr/bin/env bash
     echo "Installing all applications from Brewfiles..."
     brew bundle --file /usr/share/ublue-os/homebrew/default.Brewfile
     brew bundle --file /usr/share/ublue-os/homebrew/development.Brewfile
     brew bundle --file /usr/share/ublue-os/homebrew/fonts.Brewfile
-    brew bundle --file /usr/share/ublue-os/homebrew/flatpaks.Brewfile
+
+# Install all Flatpaks at once
+[group('Apps')]
+install-all-flatpaks:
+    #!/usr/bin/env bash
+    echo "Installing GUI tools"
+    flatpaks=(
+        "net.waterfox.waterfox"
+        "org.mozilla.Thunderbird"
+        "org.gnome.Calculator"
+        "org.gnome.Calendar"
+        "org.gnome.Characters"
+        "org.gnome.Connections"
+        "org.gnome.Contacts"
+        "org.gnome.DejaDup"
+        "org.gnome.FileRoller"
+        "org.gnome.Firmware"
+        "org.gnome.Loupe"
+        "org.gnome.Maps"
+        "org.gnome.NautilusPreviewer"
+        "org.gnome.Papers"
+        "org.gnome.SimpleScan"
+        "org.gnome.baobab"
+        "org.gnome.clocks"
+        "org.gnome.font-viewer"
+        "org.qbittorrent.qBittorrent"
+        "com.github.PintaProject.Pinta"
+        "com.github.rafostar.Clapper"
+        "com.github.tchx84.Flatseal"
+        "com.mattjakeman.ExtensionManager"
+        "io.github.flattool.Warehouse"
+        "io.github.flattool.Ignition"
+        "io.missioncenter.MissionCenter"
+        "io.gitlab.adhami3310.Impression"
+        "io.github.fabrialberio.pinapp"
+        "ca.desrt.dconf-editor"
+        "be.alexandervanhee.gradia"
+        "me.iepure.devtoolbox"
+        "org.kde.kleopatra"
+        "com.sublimetext.three"
+        "com.ranfdev.Distrobox"
+        "io.github.kolunmi.Bazaar"
+        "page.codeberg.Imaginer.Refine"
+        "org.gtk.Gtk3theme.adw-gtk3"
+        "org.gtk.Gtk3theme.adw-gtk3-dark"
+        "org.keepassxc.KeePassXC"
+        "org.signal.Signal"
+    )
+    for flatpak in "${flatpaks[@]}"; do
+        flatpak install flathub "$flatpak" -y
+    done
 
 # Install JetBrains Toolbox for managing JetBrains IDEs
 [group('Apps')]

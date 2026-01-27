@@ -20,7 +20,13 @@ echo "::endgroup::"
 echo "::group:: Building Image..."
 
 # Install Kernel Akmods
-/ctx/build/05-install-kernel-akmods.sh
+# /ctx/build/05-install-kernel-akmods.sh
+
+# Install Nvidia Akmods
+# /ctx/build/06-nvidia-akmods.sh
+
+# Install ZFS
+# /ctx/build/07-zfs-akmods.sh
 
 # Install Packages
 /ctx/build/10-packages.sh

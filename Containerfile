@@ -35,11 +35,6 @@
 ###############################################################################
 
 # Context stage - combine local and imported OCI container resources
-ARG AKMODS_FLAVOR="coreos-stable"
-ARG BASE_IMAGE_NAME="silverblue"
-ARG KERNEL="6.10.10-200.fc40.x86_64"
-ARG IMAGE_TAG="stable"
-ARG IMAGE_NAME="uBluke-nvidia"
 FROM scratch AS ctx
 
 COPY build /build
@@ -49,7 +44,7 @@ COPY custom /custom
 # COPY --from=ghcr.io/projectbluefin/common:latest /system_files /oci/common
 
 # Base Image - GNOME included
-FROM ghcr.io/ublue-os/silverblue-main:latest
+FROM ghcr.io/ublue-os/silverblue-nvidia:latest
 
 ## Alternative base images, no desktop included (uncomment to use):
 # FROM ghcr.io/ublue-os/base-main:latest    
