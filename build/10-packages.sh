@@ -40,7 +40,6 @@ FEDORA_PACKAGES=(
     lm_sensors
     make
     mesa-libGLU
-    neovim
     podman-compose
     podman-machine
     pulseaudio-utils

@@ -35,6 +35,11 @@
 ###############################################################################
 
 # Context stage - combine local and imported OCI container resources
+ARG BASE_IMAGE="${BASE_IMAGE:-ghcr.io/ublue-os/silverblue-main:stable}"
+ARG KERNEL_FLAVOR="${KERNEL_FLAVOR:-main}"
+ARG FEDORA_VERSION="${FEDORA_VERSION:-43}"
+ARG KERNEL_VERSION="${KERNEL_VERSION:-6.18.6-200.fc43.x86_64}"
+
 FROM scratch AS ctx
 
 COPY build /build
@@ -44,36 +49,46 @@ COPY custom /custom
 # COPY --from=ghcr.io/projectbluefin/common:latest /system_files /oci/common
 
 # Base Image - GNOME included
-FROM ghcr.io/ublue-os/silverblue-nvidia:latest
+FROM ghcr.io/ublue-os/silverblue-main:latest AS base
+ARG IMAGE_NAME="${IMAGE_NAME:-base}"
 
-## Alternative base images, no desktop included (uncomment to use):
-# FROM ghcr.io/ublue-os/base-main:latest    
-# FROM quay.io/centos-bootc/centos-bootc:stream10
-
-## Alternative GNOME OS base image (uncomment to use):
-# FROM quay.io/gnome_infrastructure/gnome-build-meta:gnomeos-nightly
-
-### /opt
-## Some bootable images, like Fedora, have /opt symlinked to /var/opt, in order to
-## make it mutable/writable for users. However, some packages write files to this directory,
-## thus its contents might be wiped out when bootc deploys an image, making it troublesome for
-## some packages. Eg, google-chrome, docker-desktop.
-##
-## Uncomment the following line if one desires to make /opt immutable and be able to be used
-## by the package manager.
-
+# Make /opt immutable
 RUN rm /opt && mkdir /opt
 
+# Import nvidia akmods
+FROM ghcr.io/ublue-os/akmods-nvidia-open:${KERNEL_FLAVOR}-${FEDORA_VERSION}-${KERNEL_VERSION} AS nvidia-akmods
+
 ### MODIFICATIONS
-## Make modifications desired in your image and install packages by modifying the build scripts.
-## The following RUN directive mounts the ctx stage which includes:
-##   - Local build scripts from /build
-##   - Local custom files from /custom
-##   - Files from @projectbluefin/common at /oci/common
-##   - Files from @projectbluefin/branding at /oci/branding
-##   - Files from @ublue-os/artwork at /oci/artwork
-##   - Files from @ublue-os/brew at /oci/brew
-## Scripts are run in numerical order (10-build.sh, 20-example.sh, etc.)
+## make modifications desired in your image and install packages by modifying the build.sh script
+## the following RUN directive does all the things required to run "build.sh" as recommended.
+
+# Nvidia Stage
+FROM base AS nvidia
+
+# Remove conflicting packages
+RUN --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=tmpfs,dst=/tmp \
+    dnf5 -y remove \
+        nvidia-gpu-firmware \
+        rocm-hip \
+        rocm-opencl \
+        rocm-clinfo \
+        rocm-smi || true
+
+# Install Nvidia drivers
+RUN --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=bind,from=nvidia-akmods,src=/rpms,dst=/tmp/akmods-rpms \
+    --mount=type=tmpfs,dst=/tmp \
+    --mount=type=secret,id=GITHUB_TOKEN \
+    /ctx/build/ghcurl "https://raw.githubusercontent.com/ublue-os/main/refs/heads/main/build_files/nvidia-install.sh" --retry 3 -Lo /tmp/nvidia-install.sh && \
+    chmod +x /tmp/nvidia-install.sh && \
+    IMAGE_NAME="${IMAGE_NAME}" /tmp/nvidia-install.sh && \
+    rm -f /usr/share/vulkan/icd.d/nouveau_icd.*.json && \
+    ln -s libnvidia-ml.so.1 /usr/lib64/libnvidia-ml.so
 
 # Copy Homebrew files from the brew image
 # And enable
