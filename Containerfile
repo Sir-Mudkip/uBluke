@@ -1,7 +1,7 @@
 ###############################################################################
 # PROJECT NAME CONFIGURATION
 ###############################################################################
-# Name: uBluke-nvidia
+# Name: ubluke
 #
 # IMPORTANT: Change "finpilot" above to your desired project name.
 # This name should be used consistently throughout the repository in:
@@ -38,7 +38,7 @@
 ARG BASE_IMAGE="${BASE_IMAGE:-ghcr.io/ublue-os/silverblue-main:latest}"
 ARG KERNEL_FLAVOR="${KERNEL_FLAVOR:-main}"
 ARG FEDORA_VERSION="${FEDORA_VERSION:-43}"
-ARG KERNEL_VERSION="${KERNEL_VERSION:-6.18.6-200.fc43.x86_64}"
+ARG KERNEL_VERSION="${KERNEL_VERSION:-6.18.7-200.fc43.x86_64}"
 
 FROM scratch AS ctx
 
