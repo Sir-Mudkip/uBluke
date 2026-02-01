@@ -121,8 +121,8 @@ install-jetbrains-toolbox:
     tar zxf jetbrains-toolbox-"${BUILD_VERSION}".tar.gz
     mkdir -p $HOME/.local/share/JetBrains/ToolboxApp/
     mv jetbrains-toolbox-"${BUILD_VERSION}"/* $HOME/.local/share/JetBrains/ToolboxApp/
-   popd
     echo "Launching JetBrains Toolbox..."
+    popd
     $HOME/.local/share/JetBrains/ToolboxApp/bin/jetbrains-toolbox
 
 # Shortcut for install-jetbrains-toolbox
