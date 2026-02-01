@@ -10,9 +10,10 @@ I am also keen to allow this image to be installed as a VM or on baremetal as a 
 
 Simple setup to have things configured right away:
 
-- ujust install-all-brew
 - ujust setup-gnome
 - ujust install-clipboard-indicator
+- ujust install-flatpaks
+- ujust install-all-brew
 
 The more I work on this the more I will add, streamline, change, and everything else. Please see below for the rest of the finpilot docs which i used to build this image.
 

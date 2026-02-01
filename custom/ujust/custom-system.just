@@ -59,7 +59,7 @@ setup-gnome:
     dconf write /org/gnome/settings-daemon/plugins/color/night-light-schedule-automatic true
 
     # unpin apps from dock
-    dconf write /org/gnome/shell/favorite-apps "['']"
+    dconf write /org/gnome/shell/favorite-apps "['Terminal']"
 
     # browser launch shortcut
     dconf write /org/gnome/settings-daemon/plugins/media-keys/www "['<Control><Alt>w']"
@@ -70,15 +70,15 @@ setup-gnome:
     dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/name "'Ptyxis'"
     dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/binding "'<Control><Alt>t'"
     dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/command "'/usr/bin/ptyxis --new-window'"
-    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/name "'Ptyxis New Tab with Current Profile ID'"
-    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/binding "'<Control><Shift>t'"
-    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/command "'/usr/bin/ptyxis --tab-with-profile=PROFILE_UUID'"
     dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/name "'KeePass'"
     dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/binding "'<Control><Alt>k'"
     dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/command "'flatpak run org.keepassxc.KeePassXC'"
 
     # window switcher
     dconf write /org/gnome/desktop/wm/keybindings/switch-windows "['<Alt>Tab']"
+
+    # Add minimise button to apps
+    gsettings set org.gnome.desktop.wm.preferences button-layout ':minimize,maximize,close'
 
 # Run a system benchmark (requires stress-ng from Homebrew)
 [group('System')]

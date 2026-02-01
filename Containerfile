@@ -44,10 +44,11 @@ FROM scratch AS ctx
 
 COPY build /build
 COPY custom /custom
-# Copy from OCI containers to distinct subdirectories to avoid conflicts
-# Note: Renovate can automatically update these :latest tags to SHA-256 digests for reproducibility
-# COPY --from=ghcr.io/projectbluefin/common:latest /system_files /oci/common
 
+# Import nvidia akmods prior to setting base stage
+FROM ghcr.io/ublue-os/akmods-nvidia-open:${KERNEL_FLAVOR}-${FEDORA_VERSION}-${KERNEL_VERSION} AS nvidia-akmods
+
+# Copy from OCI containers to distinct subdirectories to avoid conflicts
 # Base Image - GNOME included
 FROM ghcr.io/ublue-os/silverblue-main:latest AS base
 ARG IMAGE_NAME="${IMAGE_NAME:-base}"
@@ -56,15 +57,29 @@ ARG IMAGE_NAME="${IMAGE_NAME:-base}"
 RUN rm /opt && mkdir /opt
 
 # Import nvidia akmods
-FROM ghcr.io/ublue-os/akmods-nvidia-open:${KERNEL_FLAVOR}-${FEDORA_VERSION}-${KERNEL_VERSION} AS nvidia-akmods
 
 ### MODIFICATIONS
 ## make modifications desired in your image and install packages by modifying the build.sh script
 ## the following RUN directive does all the things required to run "build.sh" as recommended.
 
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    /ctx/build/00-base-build.sh
+
+# Copy Homebrew files from the brew image
+# And enable
+COPY --from=ghcr.io/ublue-os/brew:latest /system_files /
+RUN --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    /usr/bin/systemctl preset brew-setup.service && \
+    /usr/bin/systemctl preset brew-update.timer && \
+    /usr/bin/systemctl preset brew-upgrade.timer
+
 # Nvidia Stage
 FROM base AS nvidia
-
 # Remove conflicting packages
 RUN --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
@@ -88,23 +103,8 @@ RUN --mount=type=cache,dst=/var/cache \
     chmod +x /tmp/nvidia-install.sh && \
     IMAGE_NAME="${IMAGE_NAME}" /tmp/nvidia-install.sh && \
     rm -f /usr/share/vulkan/icd.d/nouveau_icd.*.json && \
-    ln -s libnvidia-ml.so.1 /usr/lib64/libnvidia-ml.so
-
-# Copy Homebrew files from the brew image
-# And enable
-COPY --from=ghcr.io/ublue-os/brew:latest /system_files /
-RUN --mount=type=cache,dst=/var/cache \
-    --mount=type=cache,dst=/var/log \
-    --mount=type=tmpfs,dst=/tmp \
-    /usr/bin/systemctl preset brew-setup.service && \
-    /usr/bin/systemctl preset brew-update.timer && \
-    /usr/bin/systemctl preset brew-upgrade.timer
-
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=cache,dst=/var/cache \
-    --mount=type=cache,dst=/var/log \
-    --mount=type=tmpfs,dst=/tmp \
-    /ctx/build/00-base-build.sh
+    ln -s libnvidia-ml.so.1 /usr/lib64/libnvidia-ml.so && \
+    /ctx/build/50-clean.sh
 
 ### LINTING
 ## Verify final image and contents are correct.
