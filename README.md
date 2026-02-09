@@ -12,9 +12,9 @@ Simple setup to have things configured right away:
 
 - ujust setup-gnome
 - ujust install-clipboard-indicator
-- ujust install-flatpaks (this will be removed when the preinstall is fixed)
 - ujust install-brew-tools
-- ujust configure-nvidia
+- ujust configure-nvidia (OPTIONAL, but this is an nvidia image so why not?)
+- ujust organise-gui (OPTIONAL)
 
 The more I work on this the more I will add, streamline, change, and everything else. Please see below for the rest of the finpilot docs which i used to build this image.
 
