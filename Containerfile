@@ -44,6 +44,7 @@ FROM scratch AS ctx
 
 COPY build /build
 COPY custom /custom
+COPY system /system
 
 # Import nvidia akmods prior to setting base stage
 FROM ghcr.io/ublue-os/akmods-nvidia-open:${KERNEL_FLAVOR}-${FEDORA_VERSION}-${KERNEL_VERSION} AS nvidia-akmods

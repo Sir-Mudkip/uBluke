@@ -118,4 +118,3 @@ if [[ $VALIDATION_FAILED -eq 1 ]]; then
 fi
 
 echo "::endgroup::"
-

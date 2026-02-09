@@ -16,6 +16,12 @@ source /ctx/build/copr-helpers.sh
 # Enable nullglob for all glob operations to prevent failures on empty matches
 shopt -s nullglob
 
+echo "Installing Tailscale"
+# Enable and install tailscale
+dnf config-manager addrepo --from-repofile=https://pkgs.tailscale.com/stable/fedora/tailscale.repo
+dnf config-manager setopt tailscale-stable.enabled=0
+dnf -y install --enablerepo='tailscale-stable' tailscale
+
 echo "::group:: Install Packages"
 
 # Install packages using dnf5
@@ -71,6 +77,15 @@ dnf -y install "${FEDORA_PACKAGES[@]}"
 # Example using COPR with isolated pattern:
 # copr_install_isolated "ublue-os/staging" package-name
 
+echo "Back patching of flatpak"
+dnf5 install -y dbus-x11
+dnf -y copr enable ublue-os/flatpak-test
+dnf -y copr disable ublue-os/flatpak-test
+dnf -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak flatpak
+dnf -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-libs flatpak-libs
+dnf -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-session-helper flatpak-session-helper
+dnf -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test install flatpak-debuginfo flatpak-libs-debuginfo flatpak-session-helper-debuginfo
+
 # Packages to exclude - common to all versions
 EXCLUDED_PACKAGES=(
     fedora-bookmarks
@@ -92,52 +107,6 @@ if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
         echo "No excluded packages found to remove."
     fi
 fi
-
-# Example using COPR with isolated pattern:
-# copr_install_isolated "ublue-os/staging" package-name
-
-echo "::endgroup::"
-
-echo "::group:: System Configuration"
-
-# Enable/disable systemd services
-# systemctl enable podman.socket
-# Example: systemctl mask unwanted-service
-systemctl --global enable podman-auto-update.timer
-
-echo "Disabling print services"
-systemctl disable cups.socket
-systemctl mask cups.socket
-systemctl disable cups.service
-systemctl mask cups.service
-systemctl disable cups-browsed.service
-systemctl mask cups-browsed.service
-
-echo "Disabling avahi-daemon"
-systemctl disable avahi-daemon.socket
-systemctl mask avahi-daemon.socket
-systemctl disable avahi-daemon.service
-systemctl mask avahi-daemon.service
-
-echo "Disabling the modem manager"
-systemctl disable ModemManager.service
-systemctl mask ModemManager.service
-
-echo "Disabling the sssd daemons"
-systemctl disable sssd.service
-systemctl mask sssd.service
-systemctl disable sssd-kcm.service
-systemctl mask sssd-kcm.service
-systemctl disable sssd-kcm.socket
-systemctl mask sssd-kcm.socket
-
-echo "Disabling the location service"
-systemctl disable geoclue.service
-systemctl mask geoclue.service
-
-echo "::endgroup::"
-
-echo "::group:: Cleanup"
 
 echo "::endgroup::"
 
