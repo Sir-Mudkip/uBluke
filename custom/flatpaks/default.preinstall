@@ -108,7 +108,7 @@ Branch=stable
 Branch=stable
 
 # Universal Blue Specific
-[Flatpak Preinstall com.ranfdev.Distrobox]
+[Flatpak Preinstall com.ranfdev.DistroShelf]
 Branch=stable
 
 [Flatpak Preinstall io.github.kolunmi.Bazaar]

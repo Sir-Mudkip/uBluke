@@ -80,6 +80,46 @@ setup-gnome:
     # Add minimise button to apps
     gsettings set org.gnome.desktop.wm.preferences button-layout ':minimize,maximize,close'
 
+[group('System')]
+organise-gui:
+    #!/usr/bin/env bash	
+    echo "Organizing apps into folders"
+    # Create folder structure
+    dconf write /org/gnome/desktop/app-folders/folder-children "['Internet', 'Utilities', 'Graphics', 'System', 'Development', 'Media']"
+
+    # Internet folder
+    dconf write /org/gnome/desktop/app-folders/folders/Internet/name "'Internet'"
+    dconf write /org/gnome/desktop/app-folders/folders/Internet/apps "['net.waterfox.waterfox.desktop', 'org.mozilla.Thunderbird.desktop', 'org.signal.Signal.desktop', 'org.qbittorrent.qBittorrent.desktop']"
+
+    # Utilities folder
+    dconf write /org/gnome/desktop/app-folders/folders/Utilities/name "'Utilities'"
+    dconf write /org/gnome/desktop/app-folders/folders/Utilities/apps "['org.gnome.Calculator.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Characters.desktop', 'org.gnome.Contacts.desktop', 'org.gnome.DejaDup.desktop', 'org.gnome.FileRoller.desktop', 'org.gnome.Maps.desktop', 'org.gnome.Papers.desktop', 'org.gnome.SimpleScan.desktop', 'org.gnome.baobab.desktop', 'org.gnome.clocks.desktop', 'org.gnome.font-viewer.desktop']"
+
+    # Graphics folder
+    dconf write /org/gnome/desktop/app-folders/folders/Graphics/name "'Graphics'"
+    dconf write /org/gnome/desktop/app-folders/folders/Graphics/apps "['com.github.PintaProject.Pinta.desktop', 'org.gnome.Loupe.desktop', 'page.codeberg.Imaginer.Refine.desktop', 'be.alexandervanhee.gradia.desktop']"
+
+    # Media folder
+    dconf write /org/gnome/desktop/app-folders/folders/Media/name "'Media'"
+    dconf write /org/gnome/desktop/app-folders/folders/Media/apps "['com.github.rafostar.Clapper.desktop']"
+
+    # System folder
+    dconf write /org/gnome/desktop/app-folders/folders/System/name "'System'"
+    dconf write /org/gnome/desktop/app-folders/folders/System/apps "['org.gnome.Connections.desktop', 'org.gnome.Firmware.desktop', 'com.github.tchx84.Flatseal.desktop', 'com.mattjakeman.ExtensionManager.desktop', 'io.github.flattool.Warehouse.desktop', 'io.github.flattool.Ignition.desktop', 'io.gitlab.adhami3310.Impression.desktop', 'io.github.fabrialberio.pinapp.desktop', 'ca.desrt.dconf-editor.desktop', 'org.kde.kleopatra.desktop', 'com.ranfdev.Distrobox.desktop']"
+
+    # Development folder
+    dconf write /org/gnome/desktop/app-folders/folders/Development/name "'Development'"
+    dconf write /org/gnome/desktop/app-folders/folders/Development/apps "['com.sublimetext.three.desktop', 'me.iepure.devtoolbox.desktop', 'org.virt_manager.virt-viewer.desktop', 'io.github.kolunmi.Bazaar.desktop']"
+
+    echo "Done! Apps organized into folders."
+
+    # Make apps appear on first page
+    echo "Ensuring apps appear on the first page"
+    # Force layout order so folders + KeePassXC + Terminal land on page 1
+    dconf write /org/gnome/shell/app-picker-layout "[{'Internet': <{'position': <0>}>, 'Utilities': <{'position': <1>}>, 'Graphics': <{'position': <2>}>, 'Media': <{'position': <3>}>, 'System': <{'position': <4>}>, 'Development': <{'position': <5>}>, 'org.keepassxc.KeePassXC.desktop': <{'position': <6>}>, 'Terminal': <{'position': <7>}>}]"
+
+    echo "Gnome Setup and Organised!"
+
 # Run a system benchmark (requires stress-ng from Homebrew)
 [group('System')]
 benchmark:
